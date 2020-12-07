@@ -12,6 +12,8 @@ exports.getAllPosts = (request, response) => {
                     body: document.data().body,
                     userHandle: document.data().userHandle,
                     createdAt: document.data().createdAt,
+                    commentCount: document.data().commentCount,
+                    likeCount: document.data().likeCount,
                     userImage: document.data().userImage
                 });
             });
