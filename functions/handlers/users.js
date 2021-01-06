@@ -3,6 +3,10 @@ const { validateSignup, validateLogin, reduceUserDetails } = require('../utiliti
 const firebase = require('firebase');
 const firebaseConfig = require('../utilities/firebaseConfig');
 const { user } = require('firebase-functions/lib/providers/auth');
+const BusBoy = require('busboy');
+const path = require('path');
+const os = require('os');
+const fs = require('fs');
 
 firebase.initializeApp(firebaseConfig)
 
@@ -79,7 +83,7 @@ exports.login = (request, response) => {
     })
     .catch(error => {
         console.error(error)
-        if(error.code === 'auth/wrong-password'){
+        if(error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found'){
             return response.status(403).json({ status: 'Wrong credentials. Please try again.'})
         } else {
             return response.status(500).json({ error: error.code })
@@ -123,10 +127,7 @@ exports.getAuthenticatedUser = (request, response) => {
         })
 }
 exports.uploadProfileImage = (request, response) => {
-    const BusBoy = require('busboy');
-    const path = require('path');
-    const os = require('os');
-    const fs = require('fs');
+    console.log('hit')
     const busboy = new BusBoy({ headers: request.headers });
     let imageFileName;
     let profileImage = {};
