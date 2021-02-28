@@ -73,6 +73,9 @@ exports.login = (request, response) => {
     }
 
     const { valid, errors } = validateLogin(user);
+    if (!valid) {
+        return response.status(400).json(errors)
+    };
 
     firebase.auth().signInWithEmailAndPassword(user.email, user.password)
     .then(data => {
@@ -84,7 +87,7 @@ exports.login = (request, response) => {
     .catch(error => {
         console.error(error)
         if(error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found'){
-            return response.status(403).json({ status: 'Wrong credentials. Please try again.'})
+            return response.status(403).json({ error: 'Wrong credentials. Please try again.'})
         } else {
             return response.status(500).json({ error: error.code })
         }

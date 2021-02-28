@@ -23,6 +23,10 @@ exports.getAllPosts = (request, response) => {
 }
 
 exports.createPost = (request, response) => {
+    if (request.body.body.trim() === '') {
+        return response.status(400).json({ body: 'Please enter text'})
+    }
+    
     const newPost = {
         body: request.body.body,
         userHandle: request.user.handle,
